@@ -135,44 +135,36 @@ This CFG was extracted and formatted by GPT-5.4 from the EBNF tables in the AMUL
 ## Stage 1 Prompts
 
 - Specified task:
-```
-Identify suggestions using both the provided system specification and the model's description (in SysML v2). The suggestions should refer to important elements of the system specification that are not present in the model's description. A suggestion can also be to remove an element of the model that is not in the specification. Finally, a suggestion can be an element of the model that must be modified to better align with the specification. Propose at most [maxNbOfSuggestions] suggestions. You don't have to propose that many, you can propose less if the model is fine, or even no suggestion at all if the model is perfect!
-```
+> Identify suggestions using both the provided system specification and the model's description (in SysML v2). The suggestions should refer to important elements of the system specification that are not present in the model's description. A suggestion can also be to remove an element of the model that is not in the specification. Finally, a suggestion can be an element of the model that must be modified to better align with the specification. Propose at most [maxNbOfSuggestions] suggestions. You don't have to propose that many, you can propose less if the model is fine, or even no suggestion at all if the model is perfect!
+
 
 - Output format constraints:
-```
-List the suggestions as a JSON array with the following elements for each suggestion: *name*: name of the suggestion; *type*: structure or behavior; *coherency*: true/false indicating whether it refers to a coherency issue; *description*: a precise description of the suggestion (e.g., missing element); *howToSolve*: how the model could be improved to address this suggestion; *reference*: name of the main concerned modeling element in the provided model (one word, no space); *outsiders*: elements that should be added to update the system (comma-separated); *views*: modeling views concerned by this suggestion (comma-separated), including the block diagram (use "BlockDiagram") and any relevant state machines (refer to a state machine using the corresponding block name). Respect this JSON format.
-```
+> List the suggestions as a JSON array with the following elements for each suggestion: *name*: name of the suggestion; *type*: structure or behavior; *coherency*: true/false indicating whether it refers to a coherency issue; *description*: a precise description of the suggestion (e.g., missing element); *howToSolve*: how the model could be improved to address this suggestion; *reference*: name of the main concerned modeling element in the provided model (one word, no space); *outsiders*: elements that should be added to update the system (comma-separated); *views*: modeling views concerned by this suggestion (comma-separated), including the block diagram (use "BlockDiagram") and any relevant state machines (refer to a state machine using the corresponding block name). Respect this JSON format.
+
 
 - MCP tools:
-```
-Also, to determine whether a suggestion is correct, use the MCP server tool "TTool", specifically the function "handle_pre_suggestion". Call this function at most three times. After at most three calls, make a prompt decision and return it.
-```
+> Also, to determine whether a suggestion is correct, use the MCP server tool "TTool", specifically the function "handle_pre_suggestion". Call this function at most three times. After at most three calls, make a prompt decision and return it.
 
 
 ## Stage 2 Prompts
 
 - Specified task:
-```
-#TASK: translate the suggestion in a list of AMULET commands.
-```
+>\#TASK: translate the suggestion in a list of AMULET commands.
+
 
 - Output format constraints:
-```List the AMULET commands as a JSON array with the following element for each command: *command*: the command itself. Respect this JSON format, and ensure that all commands follow the AMULET syntax. Do not consider "part"; only add, remove, or modify "block", "state", "transition", "action on signal", "link", or "connection".
-```
+> List the AMULET commands as a JSON array with the following element for each command: *command*: the command itself. Respect this JSON format, and ensure that all commands follow the AMULET syntax. Do not consider "part"; only add, remove, or modify "block", "state", "transition", "action on signal", "link", or "connection".
+
 The EBNF CFG is also injected at this stage.
 
 - MCP tools:
-```
-Also, to determine whether the suggestion is correct, use the MCP server tool "TTool", specifically the function "testingMutations". Call this function at most three times. After at most three calls, make a prompt decision and return it.
-```
+>Also, to determine whether the suggestion is correct, use the MCP server tool "TTool", specifically the function "testingMutations". Call this function at most three times. After at most three calls, make a prompt decision and return it.
 
 
 ## Stage 3 Prompts
 
-```
-You are provided with a suggestion and a system to which this suggestion has been applied. Confirm that the new system, provided in SysML v2, implements this suggestion. Return only a score out of 10 (0 = no support for the suggestion, 10 = perfect support). Example: 8
-```
+>You are provided with a suggestion and a system to which this suggestion has been applied. Confirm that the new system, provided in SysML v2, implements this suggestion. Return only a score out of 10 (0 = no support for the suggestion, 10 = perfect support). Example: 8
+
 
 
 
